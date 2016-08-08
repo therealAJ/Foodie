@@ -34,7 +34,15 @@ captures/
 
 # Intellij
 *.iml
-.idea/workspace.xml
+/Foodie/.idea/workspace.xml
+/Foodie/*.iml
+/Foodie/.gradle
+/Foodie/local.properties
+/Foodie/.idea/workspace.xml
+/Foodie/.idea/libraries
+/Foodie/.DS_Store
+/Foodie/build/
+/Foodie/captures
 
 # Keystore files
 *.jks
