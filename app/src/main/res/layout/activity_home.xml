@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="@color/tangerine"
-    tools:context="me.alexjordache.foodie.MainActivity">
+    tools:context="me.alexjordache.foodie.activities.HomeActivity">
 
     <TextView
         android:layout_width="150dp"
@@ -45,6 +45,7 @@
         android:layout_gravity="center_horizontal"/>
     <Button
         android:text="I'm hungry!"
+        android:id="@+id/find_restaurants_btn"
         android:textAllCaps="false"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"

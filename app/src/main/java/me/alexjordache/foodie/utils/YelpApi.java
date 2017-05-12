@@ -5,4 +5,10 @@ package me.alexjordache.foodie.utils;
  */
 
 public class YelpApi {
+
+    private YelpApi() {
+
+    }
+
+
 }
