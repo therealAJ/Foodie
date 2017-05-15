@@ -1,11 +1,15 @@
 package me.alexjordache.foodie.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,6 +26,8 @@ public class LocationProvider implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
 
     public abstract interface LocationCallback {
         public void handleNewLocation(Location location);
@@ -72,6 +78,16 @@ public class LocationProvider implements
     @Override
     public void onConnected(@Nullable  Bundle bundle) {
         Log.i(TAG, "Location services connected.");
+
+        // Check for permission
+        if (ContextCompat.checkSelfPermission(mContext,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    (Activity) mContext, // Activity
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
 
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
