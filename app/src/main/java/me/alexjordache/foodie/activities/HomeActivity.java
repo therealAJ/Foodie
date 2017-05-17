@@ -1,6 +1,7 @@
 package me.alexjordache.foodie.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,8 +39,6 @@ public class HomeActivity extends AppCompatActivity implements LocationProvider.
 
     }
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -65,10 +64,29 @@ public class HomeActivity extends AppCompatActivity implements LocationProvider.
     };
 
     @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 111: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+
+                } else {
+                    // permission was denied
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
     public void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
-
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+        Log.d(TAG, String.valueOf(location.getLongitude()));
+        if(location != null) {
+            mLatitudeText.setText(String.valueOf(location));
+            mLongitudeText.setText(String.valueOf(location));
+        }
     }
 }

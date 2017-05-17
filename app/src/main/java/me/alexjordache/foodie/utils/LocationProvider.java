@@ -27,24 +27,18 @@ public class LocationProvider implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
-
-    public abstract interface LocationCallback {
-        public void handleNewLocation(Location location);
+    public interface LocationCallback {
+        void handleNewLocation(Location location);
     }
 
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 111;
     public static final String TAG = LocationProvider.class.getSimpleName();
-
-    /*
-     * Define a request code to send to Google Play services
-     * This code is returned in Activity.onActivityResult
-     */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
     private LocationCallback mLocationCallback;
     private Context mContext;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+
 
     public LocationProvider(Context context, LocationCallback callback) {
         mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -96,6 +90,8 @@ public class LocationProvider implements
             mLocationCallback.handleNewLocation(location);
         }
     }
+
+
 
 
     @Override
