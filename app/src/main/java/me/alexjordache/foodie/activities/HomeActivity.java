@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import me.alexjordache.foodie.R;
 import me.alexjordache.foodie.utils.LocationProvider;
@@ -16,27 +15,24 @@ import me.alexjordache.foodie.utils.LocationProvider;
 public class HomeActivity extends AppCompatActivity implements LocationProvider.LocationCallback {
 
     private static final String TAG = "HomeActivity";
-    private LocationProvider mLocationProvider;
-    private TextView mLatitudeText;
-    private TextView mLongitudeText;
+    public static final String CURRENT_LATITUDE = "CURRENT_LATITUDE";
+    public static final String CURRENT_LONGITUDE = "CURRENT_LONGITUDE";
 
+    private LocationProvider mLocationProvider;
+    private double mLatitude;
+    private double mLongitude;
+    private Button mFindRestaurantsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //UI Elements
-        mLatitudeText = (TextView) findViewById(R.id.latitude_text);
-        mLongitudeText = (TextView) findViewById(R.id.longitude_text);
-
-        Button findRestaurantsButton = (Button) findViewById(R.id.find_restaurants_btn);
-
         mLocationProvider = new LocationProvider(this, this);
+        mFindRestaurantsButton = (Button) findViewById(R.id.find_restaurants_btn);
 
         //Initialize Listeners
-        findRestaurantsButton.setOnClickListener(HandleFindRestaurantsClick);
-
+        mFindRestaurantsButton.setOnClickListener(HandleFindRestaurantsClick);
     }
 
     @Override
@@ -54,12 +50,21 @@ public class HomeActivity extends AppCompatActivity implements LocationProvider.
 
 
     // Click Listeners
+
     View.OnClickListener HandleFindRestaurantsClick = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(HomeActivity.this, RestaurantsActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.next_slide_in_left, R.anim.current_slide_out_left);
+            if(v.getId() == R.id.find_restaurants_btn) {
+                Intent i = new Intent(HomeActivity.this, RestaurantsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putDouble(CURRENT_LATITUDE,mLatitude);
+                bundle.putDouble(CURRENT_LONGITUDE,mLongitude);
+                i.putExtras(bundle);
+                startActivity(i);
+                overridePendingTransition(R.anim.next_slide_in_left, R.anim.current_slide_out_left);
+                //finish();
+
+            }
         }
     };
 
@@ -83,10 +88,27 @@ public class HomeActivity extends AppCompatActivity implements LocationProvider.
     @Override
     public void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
-        Log.d(TAG, String.valueOf(location.getLongitude()));
-        if(location != null) {
-            mLatitudeText.setText(String.valueOf(location));
-            mLongitudeText.setText(String.valueOf(location));
-        }
+        setLatitude(location.getLatitude());
+        setLongitude(location.getLongitude());
+    }
+
+    //---------------------------------
+    //     Getters and Setters
+    //---------------------------------
+
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    public void setLatitude(double mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    public double getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(double mLongitude) {
+        this.mLongitude = mLongitude;
     }
 }
